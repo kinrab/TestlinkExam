@@ -1,0 +1,16 @@
+{
+  "web":
+  {
+    "baseUrl": "http://localhost:8080/testlink/",
+    "username": "admin",
+    "password": "Qwertyuiop.1234567890",
+    "browser": "chrome"
+  },
+  "db":
+  {
+    "host": "127.0.0.1",
+    "name": "testlink",
+    "user": "root",
+    "password": ""
+  }
+}
