@@ -45,9 +45,6 @@ class SessionHelper:
         #driver.find_element(By.XPATH, "//input[@value='Войти']").click()
         #driver.find_element(By.CSS_SELECTOR, "input[name='login_submit']").click()
 
-
-
-
     ####################################################################################################################
     # Функция логаута и завершения сессии:
     ####################################################################################################################
@@ -60,6 +57,7 @@ class SessionHelper:
         driver = self.app.driver
 
         #2. Выполнить действие логаута:  # <a href="logout.php" target="_parent" accesskey="q">Logout</a>
+        driver.switch_to.default_content()                  # Восстанавливаем исходное позиционирование на весь документ
         driver.switch_to.frame("titlebar")                                        # Сначала нужно переключиться на фрейм
         driver.find_element(By.LINK_TEXT, "Logout").click()                       # Жми на кнопку! :-)
 
@@ -70,51 +68,3 @@ class SessionHelper:
         #driver.find_element(By.CSS_SELECTOR, "a[accesskey='q']").click()
         #driver.find_element(By.XPATH, "//a[@href='logout.php']").click()
 
-    # def Ensure_Logout_process(self):
-    #
-    #     #driver = self.app.driver
-    #
-    #     if  self.Is_Logged_In():
-    #
-    #         self.Logout_process()
-    #
-    #
-    # def Is_Logged_In(self):
-    #
-    #     #print("Is_Logged_In:\n ")
-    #
-    #     driver = self.app.driver
-    #
-    #     num = len( driver.find_elements(By.LINK_TEXT, "Logout") )
-    #
-    #     #print("Num = ", str(num) )
-    #
-    #     return num > 0
-    #
-    #
-    # def Is_Logged_In_As(self, username):
-    #
-    #     driver = self.app.driver
-    #
-    #     item = driver.find_element(By.XPATH, "//div/div[1]/form/b")
-    #
-    #     #print("Item: " + item.text + "\n" )
-    #
-    #     return  item.text == "(" + username+ ")"
-    #
-    #
-    # def Ensure_Login_process(self, username, password):
-    #
-    #     # Открыть страницу приложения!
-    #     self.Open_Home_Page()
-    #
-    #     Flag = self.Is_Logged_In()
-    #
-    #     if  Flag is True:
-    #
-    #         if self.Is_Logged_In_As(username):
-    #             return
-    #         else:
-    #             self.Logout_process()
-    #
-    #     self.Login_process(username,password)

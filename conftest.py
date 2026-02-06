@@ -76,7 +76,7 @@ def load_config(file):
     if Parameters is None:
 
         # 2.1 Формируем имя файла и путь для открытия файла с параметрами конфигурации:
-        cfg_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), file)
+        cfg_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), file)                     # Путь + Имя файла
 
         # 2.1 Открываем файл и читаем все в переменную Parameters (закрывать не надо так как with все сам сделает!)
         with open(cfg_file) as config_file:

@@ -1,4 +1,5 @@
 from FIXTURE.session_helper import SessionHelper
+from FIXTURE.inventory_helper import InventoryHelper
 from selenium  import webdriver
 
 
@@ -29,8 +30,11 @@ class Application:
         # 2. Устанавливаем таймауты на ожидание: Для учебного приложения это не нужно все элементы сразу на странице
         self.driver.implicitly_wait(5)
 
-        # 3Создаем сессию и логинимся:
+        # 3. Создаем сессию и логинимся:
         self.session = SessionHelper(self)
+
+        #4. Создаем помощника для работы с Inventory
+        self.inventory = InventoryHelper(self)
 
         self.base_url = base_url
 

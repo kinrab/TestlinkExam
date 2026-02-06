@@ -8,4 +8,4 @@ def test_enter_exit(app):
     root.withdraw()
 
     # Показываем информационное окно
-    messagebox.showinfo("Информация", "Это информационное сообщение.")
+    messagebox.showinfo("Информация", "Мы залогинились успешно.")
