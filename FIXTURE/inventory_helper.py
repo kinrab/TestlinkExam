@@ -119,6 +119,43 @@ class InventoryHelper:
         driver.switch_to.default_content()
 
     ##################################################################################################################################################
+    # Метод удаляющий первый в списке инвентарь - тестовый стенд
+    ##################################################################################################################################################
+
+    def Delete_first_inventory(self):
+
+        # 1. В переменную driver передаем драйвер из фикстуры Application
+        driver = self.app.driver
+
+        # 2. Выбрать первую группу   <div class="x-grid3-cell-inner x-grid3-col-0" unselectable="on">Toetomi Hideyosi</div>
+        driver.switch_to.frame("mainframe")  # Сначала нужно переключиться на фрейм
+        driver.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']").click()
+
+        # 3. Open modification window - кнопку Delete нажать     <button type="button" id="ext-gen27"
+        driver.find_element(By.ID, "ext-gen27").click()
+
+        # Открывается окно с вопросами - подтвердить удаление и кнопками YES NO
+
+        # 5. Нажимаем кнопку Yes                 <button type="button" id="ext-gen48" class=" x-btn-text">Save</button>
+
+        # 5.1 Сохраняем ID текущего окна
+        original_window = driver.current_window_handle
+
+        # 5.2 Получаем список всех открытых окон и переключаемся на последнее
+        for window_handle in driver.window_handles:
+            if window_handle != original_window:
+                driver.switch_to.window(window_handle)
+                break
+
+        # 5.3 Теперь можно искать кнопку
+        driver.find_element(By.XPATH, "//button[text()='Yes']").click()
+
+        # Если нужно вернуться назад: # driver.switch_to.window(original_window) - но не нужно - окно само закрывается!
+
+        # 5.4 Восстанавливаем исходное позиционирование на весь документ
+        driver.switch_to.default_content()
+
+    ##################################################################################################################################################
     # Метод изменяющий атрибут инвентаря если он не пустой
     ##################################################################################################################################################
 
