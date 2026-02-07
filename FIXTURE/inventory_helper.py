@@ -174,22 +174,22 @@ class InventoryHelper:
         for row in driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']"):
 
             # 5.1 Ищем и получаем значение атрибута Hostname в Inventory
-            hostname = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']")
+            hostname = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']")
 
             # 5.2 Ищем и получаем значение атрибута IPaddress в Inventory
-            ipaddress = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-1') and @unselectable='on']")
+            ipaddress = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-1') and @unselectable='on']")
 
             # 5.3 Ищем и получаем значение атрибута Purpose в Inventory
-            purpose = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-2') and @unselectable='on']")
+            purpose = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-2') and @unselectable='on']")
 
             # 5.4 Ищем и получаем значение атрибута Hardware в Inventory
-            hardware = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-3') and @unselectable='on']")
+            hardware = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-3') and @unselectable='on']")
 
             # 5.5 Ищем и получаем значение атрибута Owner в Inventory
-            owner = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-4') and @unselectable='on']")
+            owner = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-4') and @unselectable='on']")
 
             # 5.6 Ищем и получаем значение атрибута Notes в Inventory
-            notes = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-5') and @unselectable='on']")
+            notes = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-5') and @unselectable='on']")
 
             inventory_list.append( Inventory ( Inventory_Hostname = hostname.text, Inventory_IPaddress = ipaddress.text, Inventory_Owner = owner.text,
                                                Inventory_Purpose = purpose.text, Inventory_Hardware = hardware.text, Inventory_Notes = notes.text ) )
