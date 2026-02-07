@@ -1,6 +1,6 @@
 from selenium.common.exceptions import NoSuchElementException # Важный импорт
 from selenium.webdriver.common.by import By
-
+from DATAMODEL.inventory_data import Inventory
 
 ########################################################################################################################################################################################
 # Класс для реализации всех вспомогательных методов работающих с сущностью Inventory (testbeds)
@@ -156,6 +156,133 @@ class InventoryHelper:
         driver.switch_to.default_content()
 
     ##################################################################################################################################################
+    # Метод возвращающий список всех элементов inventory со всем параметрами:
+    ##################################################################################################################################################
+
+    def Get_inventory_list(self):
+
+        # 1. В переменную driver передаем драйвер из фикстуры Application
+        driver = self.app.driver
+
+        # 3. Объяаляем пустой список для сохранения элементов
+        inventory_list = []
+
+        # 4. Сначала нужно переключиться на фрейм:
+        driver.switch_to.frame("mainframe")
+
+        # 5. Проходим по всем элементам inventory на странице
+        for row in driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']"):
+
+            # 5.1 Ищем и получаем значение атрибута Hostname в Inventory
+            hostname = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']")
+
+            # 5.2 Ищем и получаем значение атрибута IPaddress в Inventory
+            ipaddress = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-1') and @unselectable='on']")
+
+            # 5.3 Ищем и получаем значение атрибута Purpose в Inventory
+            purpose = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-2') and @unselectable='on']")
+
+            # 5.4 Ищем и получаем значение атрибута Hardware в Inventory
+            hardware = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-3') and @unselectable='on']")
+
+            # 5.5 Ищем и получаем значение атрибута Owner в Inventory
+            owner = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-4') and @unselectable='on']")
+
+            # 5.6 Ищем и получаем значение атрибута Notes в Inventory
+            notes = row.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-5') and @unselectable='on']")
+
+            inventory_list.append( Inventory ( Inventory_Hostname = hostname.text, Inventory_IPaddress = ipaddress.text, Inventory_Owner = owner.text,
+                                               Inventory_Purpose = purpose.text, Inventory_Hardware = hardware.text, Inventory_Notes = notes.text ) )
+
+        # End for
+
+        # 5. Восстанавливаем исходное позиционирование на весь документ
+        driver.switch_to.default_content()
+
+        return list(inventory_list)
+
+    ##################################################################################################################################################
+    # Метод возвращающий число элементов инвентаря
+    ##################################################################################################################################################
+
+    def count(self):
+
+        # 1. В переменную driver передаем драйвер из фикстуры Application
+        driver = self.app.driver
+
+        # 2. Сначала нужно переключиться на фрейм:
+        driver.switch_to.frame("mainframe")
+
+        # 3. Посчитать количество контактов:
+        count = len( driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']") )
+
+        # 4. Восстанавливаем исходное позиционирование на весь документ
+        driver.switch_to.default_content()
+
+        return count
+
+    ##################################################################################################################################################
+    # Метод удаляющий элемент инвентаря по индексу
+    ##################################################################################################################################################
+
+    def Delete_inventory_by_index(self, index):
+
+        # 1. В переменную driver передаем драйвер из фикстуры Application
+        driver = self.app.driver
+
+        # 2. Кликнуть на элемент в списке заданный индексом:
+        self.Select_Inventory_By_Index(index)
+
+        # 3. Нажать на кнопку Delete
+
+        # 3.1 Open modification window - кнопку Delete нажать     <button type="button" id="ext-gen27"
+        driver.find_element(By.ID, "ext-gen27").click()
+
+        # Открывается окно с вопросами - подтвердить удаление и кнопками YES NO
+
+        # 3.2 Нажимаем кнопку Yes                 <button type="button" id="ext-gen48" class=" x-btn-text">Save</button>
+
+        # 3.3 Сохраняем ID текущего окна
+        original_window = driver.current_window_handle
+
+        # 3.4 Получаем список всех открытых окон и переключаемся на последнее
+        for window_handle in driver.window_handles:
+            if window_handle != original_window:
+                driver.switch_to.window(window_handle)
+                break
+
+        # 3.5 Теперь можно искать кнопку
+        driver.find_element(By.XPATH, "//button[text()='Yes']").click()
+
+        # Если нужно вернуться назад: # driver.switch_to.window(original_window) - но не нужно - окно само закрывается!
+
+
+        # 4. Восстанавливаем исходное позиционирование на весь документ
+        driver.switch_to.default_content()
+
+    ##################################################################################################################################################
+    # Метод выбирает на экране инвентаря нужный элемент по индексу (считая сверху - вниз)
+    ##################################################################################################################################################
+
+    def Select_Inventory_By_Index(self, index):
+
+        # 1. В переменную driver передаем драйвер из фикстуры Application
+        driver = self.app.driver
+
+        # 2. Сначала нужно переключиться на фрейм
+        driver.switch_to.frame("mainframe")
+
+        # 3. Проходим по списку всех найденных элементов и ищем нужный:
+        i = 0
+        for row in driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']"):
+            if i == index:                                                                    # Мы нашли искомый элемент
+                row.click()
+                break                                                                             # Можно завершать цикл
+            i = i + 1
+
+        return
+
+    ##################################################################################################################################################
     # Метод изменяющий атрибут инвентаря если он не пустой
     ##################################################################################################################################################
 
@@ -220,7 +347,7 @@ class InventoryHelper:
 
         # 2. Ищем элемент <h1 class="title">Inventory</h1>
         try:
-            driver.switch_to.frame("titlebar")  # Сначала нужно переключиться на фрейм
+            driver.switch_to.frame("titlebar")                                    # Сначала нужно переключиться на фрейм
             element = driver.find_element(By.CSS_SELECTOR, "h1.title") # Если элемент есть, то мы уже на нужной странице
             if element is not None:
                 driver.switch_to.default_content()          # Восстанавливаем исходное позиционирование на весь документ

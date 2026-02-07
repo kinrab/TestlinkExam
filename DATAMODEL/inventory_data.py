@@ -25,7 +25,7 @@ class Inventory:
 
     def __repr__(self):
 
-        return "%s:%s:%s:%s:%s:%s" % ( self.inventory_Hostname, self.inventory_IPaddress, self.inventory_Owner, self.inventory_Purpose, self.inventory_Hardware, self.inventory_Notes )
+        return "%s:%s:%s:%s:%s:%s" % ( self.Inventory_Hostname, self.Inventory_IPaddress, self.Inventory_Owner, self.Inventory_Purpose, self.Inventory_Hardware, self.Inventory_Notes )
 
     ####################################################################################################################
     #  Определение операции сравнения экземпляров класса (сравниваем все кроме Notes!)
@@ -33,6 +33,6 @@ class Inventory:
 
     def __eq__(self, other):
 
-        return  (self.inventory_Hostname == other.inventory_Hostname) and (self.inventory_IPaddress == other.inventory_IPaddress) and (self.inventory_Owner== other.Owner) \
-                (self.inventory_Purpose == other.inventory_Purpose) and (self.inventory_Hardware == other.inventory_Hardware)
+        return  (self.Inventory_Hostname == other.Inventory_Hostname) and (self.Inventory_IPaddress == other.Inventory_IPaddress) and (self.Inventory_Owner== other.Owner) \
+                (self.Inventory_Purpose == other.Inventory_Purpose) and (self.Inventory_Hardware == other.Inventory_Hardware)
 

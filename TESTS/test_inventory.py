@@ -1,3 +1,4 @@
+from random import randrange
 
 from DATAMODEL.inventory_data import Inventory
 
@@ -5,59 +6,78 @@ from DATAMODEL.inventory_data import Inventory
 # Тест проверяющий создание нового инвентаря (тестовых стендов)
 ########################################################################################################################################################################
 
-def test_add_inventory(app):
-
-    # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
-    app.inventory.Open_main_window()
-
-    # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
-    app.inventory.Open_Inventory_window()
-
-    # 3. Добавить новый элемент инвенторя (заполнить поля) и сохранить.
-    NewInventory = Inventory(Inventory_Hostname = "Toetomi Hideyosi",
-                             Inventory_IPaddress = "192.168.1.100",
-                             Inventory_Owner = "testmanager",
-                             Inventory_Purpose = "Testbed for integration testing",
-                             Inventory_Hardware = "Vegman R220",
-                             Inventory_Notes = "Не выключать на ночь!")
-
-    app.inventory.Add_new_inventory(NewInventory)
-
-    #4. Вернутся на главную страницу
-    app.inventory.Open_main_window()
+# def test_add_inventory(app):
+#
+#     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
+#     app.inventory.Open_main_window()
+#
+#     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
+#     app.inventory.Open_Inventory_window()
+#
+#     # 3. Добавить новый элемент инвенторя (заполнить поля) и сохранить.
+#     NewInventory = Inventory(Inventory_Hostname = "Toetomi Hideyosi",
+#                              Inventory_IPaddress = "192.168.1.100",
+#                              Inventory_Owner = "testmanager",
+#                              Inventory_Purpose = "Testbed for integration testing",
+#                              Inventory_Hardware = "Vegman R220",
+#                              Inventory_Notes = "Не выключать на ночь!")
+#
+#     app.inventory.Add_new_inventory(NewInventory)
+#
+#     #4. Вернутся на главную страницу
+#     app.inventory.Open_main_window()
 
 ########################################################################################################################################################################
 # Тест проверяющий модификацию существующего инвентаря (тестовых стендов)
 ########################################################################################################################################################################
 
-def test_modify_inventory(app):
-
-    # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
-    app.inventory.Open_main_window()
-
-    # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
-    app.inventory.Open_Inventory_window()
-
-    # 3. Указать обновляемые значения элемента инвенторя (заполнить поля) и сохранить.
-    ModInventory = Inventory(Inventory_Hostname = "Hasiba Hideyosi",
-                             Inventory_IPaddress = "192.168.1.333",
-                             Inventory_Owner = "testmanager",
-                             Inventory_Purpose = "Testbed for integration testing!!!",
-                             Inventory_Hardware = "Vegman R320",
-                             Inventory_Notes = "Не выключать на ночь!!!")
-
-    # 4. Модифицировать обновленными значениями первый элемент инвентаря
-    app.inventory.Modify_first_inventory(ModInventory)
-
-    #4. Вернутся на главную страницу
-    app.inventory.Open_main_window()
+# def test_modify_first_inventory(app):
+#
+#     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
+#     app.inventory.Open_main_window()
+#
+#     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
+#     app.inventory.Open_Inventory_window()
+#
+#     # 3. Указать обновляемые значения элемента инвенторя (заполнить поля) и сохранить.
+#     ModInventory = Inventory(Inventory_Hostname = "Hasiba Hideyosi",
+#                              Inventory_IPaddress = "192.168.1.333",
+#                              Inventory_Owner = "testmanager",
+#                              Inventory_Purpose = "Testbed for integration testing!!!",
+#                              Inventory_Hardware = "Vegman R320",
+#                              Inventory_Notes = "Не выключать на ночь!!!")
+#
+#     # 4. Модифицировать обновленными значениями первый элемент инвентаря
+#     app.inventory.Modify_first_inventory(ModInventory)
+#
+#     #4. Вернутся на главную страницу
+#     app.inventory.Open_main_window()
 
 
 ########################################################################################################################################################################
 # Тест проверяющий удаление существующего инвентаря (тестовых стендов)
 ########################################################################################################################################################################
 
-def test_delete_inventory(app):
+# def test_delete_first_inventory(app):
+#
+#     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
+#     app.inventory.Open_main_window()
+#
+#     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
+#     app.inventory.Open_Inventory_window()
+#
+#     # 3. Удалить  первый элемент инвентаря
+#     app.inventory.Delete_first_inventory()
+#
+#     # 4. Вернутся на главную страницу
+#     app.inventory.Open_main_window()
+
+########################################################################################################################################################################
+# Тест проверяющий удаление существующего инвентаря (тестовых стендов)
+########################################################################################################################################################################
+
+def test_delete_some_inventory(app):
+
 
     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
     app.inventory.Open_main_window()
@@ -65,8 +85,26 @@ def test_delete_inventory(app):
     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
     app.inventory.Open_Inventory_window()
 
-    # 4. Модифицировать обновленными значениями первый элемент инвентаря
-    app.inventory.Delete_first_inventory()
+    # 3. Определим случайным образом индекс элемента для удаления:
 
-    #4. Вернутся на главную страницу
+    # 3.1 Сколько всего элементов?
+    len = app.inventory.count()
+
+    # 3.2 Выбираем элемент для удаления в диапазоне от 0 до len:
+    index = randrange(len)
+
+    # 4. Удалить элемент инвентаря с индексом
+    app.inventory.Delete_inventory_by_index(index)
+
+    # Распечатаем оставшийся список:
+    list = app.inventory.Get_inventory_list()
+
+    for element in list:
+        print(element)
+
+    # 4. Вернутся на главную страницу
     app.inventory.Open_main_window()
+
+
+
+
