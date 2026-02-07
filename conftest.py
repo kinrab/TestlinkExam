@@ -29,7 +29,7 @@ def app(request):
         AppFixture = Application(browser =  web_config['browser'], base_url =  web_config['baseUrl'])
 
     # 4. Выполняем логин и создание сессии:
-    AppFixture.session.Login_process(username=web_config['username'], password=web_config['password'])
+    AppFixture.session.Ensure_Login(username=web_config['username'], password=web_config['password'])
 
     # Чуть позже заменим логин на этот:
     #AppFixture.session.Ensure_Login_process(username =  web_config['username'], password =  web_config['password'])
@@ -49,7 +49,7 @@ def stop(request):
     def fin():
 
         # 1. Выполняем логаут:
-        AppFixture.session.Logout_process()  # Позже заменим на Ensure_Login c проверкой того, что мы еще залогинены:
+        AppFixture.session.Ensure_logout()  # Позже заменим на Ensure_Login c проверкой того, что мы еще залогинены:
 
         # 2. Выполняем уничтожение экземпляра фикстуры:
         AppFixture.Destroy()

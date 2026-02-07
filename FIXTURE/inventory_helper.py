@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 class InventoryHelper:
 
     #################################################################################################################################################
-    # Конструктор класса InventoryHeler
+    # Конструктор класса InventoryHelper
     #################################################################################################################################################
 
     def __init__(self, app):
@@ -17,7 +17,7 @@ class InventoryHelper:
         self.app = app
 
     ##################################################################################################################################################
-    # Метод добавляющий новый инвеинарь - тестовый стенд
+    # Метод добавляющий новый инвентарь - тестовый стенд
     ##################################################################################################################################################
 
     def Add_new_inventory(self,new_inventory):
@@ -75,14 +75,77 @@ class InventoryHelper:
         # 4.3 Теперь можно искать кнопку
         driver.find_element(By.XPATH, "//button[text()='Save']").click()
 
-        # Если нужно вернуться назад: # driver.switch_to.window(original_window)
-
+        # Если нужно вернуться назад: # driver.switch_to.window(original_window) - но не нужно - окно само закрывается!
 
         # 5. Выходим на основную страницу
         driver.switch_to.default_content()                  # Восстанавливаем исходное позиционирование на весь документ
 
+    ##################################################################################################################################################
+    # Метод модификирующий первый в списке инвентарь - тестовый стенд
+    ##################################################################################################################################################
+
+    def Modify_first_inventory(self, new_inventory):
+
+        # 1. В переменную driver передаем драйвер из фикстуры Application
+        driver = self.app.driver
+
+        # 2. Выбрать первую группу   <div class="x-grid3-cell-inner x-grid3-col-0" unselectable="on">Toetomi Hideyosi</div>
+        driver.switch_to.frame("mainframe")                                       # Сначала нужно переключиться на фрейм
+        driver.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']").click()
+
+        # 3. Open modification window - кнопку Edit нажать     <button type="button" id="ext-gen25" class=" x-btn-text icon_device_edit">Edit</button>
+        driver.find_element(By.ID, "ext-gen25").click()
+
+        # 4. Fill the form
+        self.Fill_inventory_form(new_inventory)
+
+        # 5. Нажимаем кнопку Save                 <button type="button" id="ext-gen48" class=" x-btn-text">Save</button>
+
+        # 5.1 Сохраняем ID текущего окна
+        original_window = driver.current_window_handle
+
+        # 5.2 Получаем список всех открытых окон и переключаемся на последнее
+        for window_handle in driver.window_handles:
+            if window_handle != original_window:
+                driver.switch_to.window(window_handle)
+                break
+
+        # 5.3 Теперь можно искать кнопку
+        driver.find_element(By.XPATH, "//button[text()='Save']").click()
+
+        # Если нужно вернуться назад: # driver.switch_to.window(original_window) - но не нужно - окно само закрывается!
+
+        # 5.4 Восстанавливаем исходное позиционирование на весь документ
+        driver.switch_to.default_content()
+
+    ##################################################################################################################################################
+    # Метод изменяющий атрибут инвентаря если он не пустой
+    ##################################################################################################################################################
+
+    def Change_Field_Value(self, text, field_id):
+
+        driver = self.app.driver
+
+        if text is not None:
+            driver.find_element(By.ID, field_id).click()
+            driver.find_element(By.ID, field_id).clear()
+            driver.find_element(By.ID, field_id).send_keys(text)
+
     ####################################################################################################################
-    # Метод добавляющий новый инвеинарь - тестовый стенд
+    # Метод заполняющий все поля элемента инвентаря
+    ####################################################################################################################
+
+    def Fill_inventory_form(self, inventory_item):
+
+        self.Change_Field_Value(inventory_item.Inventory_Hostname, "editName")
+        self.Change_Field_Value(inventory_item.Inventory_IPaddress, "editIp")
+        # Owner пока менять не будем. Может позже добавим обработку сюда.
+        self.Change_Field_Value(inventory_item.Inventory_Purpose, "editPurpose")
+        self.Change_Field_Value(inventory_item.Inventory_Hardware, "editHw")
+        self.Change_Field_Value(inventory_item.Inventory_Notes, "editNotes")
+
+    ####################################################################################################################
+    # Метод добавляющий новый инвеинтарь - тестовый стенд
     ####################################################################################################################
 
     def Open_main_window(self):

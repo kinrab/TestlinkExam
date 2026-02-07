@@ -1,5 +1,5 @@
+from selenium.common.exceptions import NoSuchElementException # Важный импорт
 from selenium.webdriver.common.by import By
-import time
 
 # Класс описывающий сущность Сессия с логином и логаутом
 class SessionHelper:
@@ -68,3 +68,58 @@ class SessionHelper:
         #driver.find_element(By.CSS_SELECTOR, "a[accesskey='q']").click()
         #driver.find_element(By.XPATH, "//a[@href='logout.php']").click()
 
+    ####################################################################################################################
+    # Функция проверочного лиогина
+    ####################################################################################################################
+    def Ensure_Login(self, username, password):
+
+        # 0. Передаем ссылку на app и драйвер:
+        driver = self.app.driver
+        app = self.app
+
+        # 1. Открыть ссылку на testlink
+        driver.get(app.base_url)
+
+        # 2. Проверим залогинены мы или нет?
+        Flag = self.Is_Logged_In()
+
+        # в идеале добавить проверку на совпадение имени пользолвателя и релогин если имя пользователя другое!
+
+        # 3. Если залогинены то можно уходить
+        if Flag is True:
+            return
+
+        self.Login_process(username, password)
+
+    ####################################################################################################################
+    # Функция проверочного логаута и завершения сессии:
+    ####################################################################################################################
+    def Ensure_logout(self):
+
+        # 1. Проверим залогинены мы или нет?
+        Flag = self.Is_Logged_In()
+
+        # 2. Если не залогинены то можно уходить
+        if Flag is False:
+            return
+
+        self.Logout_process()
+
+    ####################################################################################################################
+    # Функция проверяет что мы внутри сессии польователя:
+    ####################################################################################################################
+    def Is_Logged_In(self):
+
+        # 1. Передаем ссылку на Selenium драйвер:
+        driver = self.app.driver
+
+        # 3. Проверяем наличие элемента на странице    <span class ="bold"> TestLink 1.9 (Prague): admin[admin] </span>
+        try:
+            element = driver.find_element(By.XPATH, "//div[@class='fullpage_head' and contains(., 'TestLink 1.9')]")
+            if element is not None:
+                return False                                                    # Возвращаемся - Мы НЕ ЗАЛОГИНЕНЫ!
+
+        except NoSuchElementException:
+            pass
+
+        return True                                                             # Иначе - МЫ ЗАЛОГИНЕНЫ!
