@@ -99,8 +99,10 @@ def test_delete_some_inventory(app):
     # Распечатаем оставшийся список:
     list = app.inventory.Get_inventory_list()
 
+    print("\n")
     for element in list:
         print(element)
+        print("\n")
 
     # 4. Вернутся на главную страницу
     app.inventory.Open_main_window()
