@@ -86,36 +86,47 @@ class InventoryHelper:
 
     def Modify_first_inventory(self, new_inventory):
 
+        self.Modify_inventory_by_index(0, new_inventory)
+
+    ##################################################################################################################################################
+    # Метод модификирующий первый в списке инвентарь - тестовый стенд
+    ##################################################################################################################################################
+
+    def Modify_inventory_by_index(self, index, new_inventory):
+
         # 1. В переменную driver передаем драйвер из фикстуры Application
         driver = self.app.driver
 
-        # 2. Выбрать первую группу   <div class="x-grid3-cell-inner x-grid3-col-0" unselectable="on">Toetomi Hideyosi</div>
-        driver.switch_to.frame("mainframe")                                       # Сначала нужно переключиться на фрейм
-        driver.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']").click()
+        # 2. Кликнуть на элемент в списке заданный индексом:
+        self.Select_Inventory_By_Index(index)
 
-        # 3. Open modification window - кнопку Edit нажать     <button type="button" id="ext-gen25" class=" x-btn-text icon_device_edit">Edit</button>
+        # 3. Нажать на кнопку Edit
+
+        # 3.1 Open modification window - кнопку Edit нажать     <button type="button" id="ext-gen27"
         driver.find_element(By.ID, "ext-gen25").click()
 
-        # 4. Fill the form
+        # 3.2 Открывается окно c атрибутами выбранного элемента:
+
+        # 4. Заполняем фррму новыми значениями:
         self.Fill_inventory_form(new_inventory)
 
-        # 5. Нажимаем кнопку Save                 <button type="button" id="ext-gen48" class=" x-btn-text">Save</button>
+        # 5. Нажимаем кнопку Yes                 <button type="button" id="ext-gen48" class=" x-btn-text">Save</button>
 
-        # 5.1 Сохраняем ID текущего окна
+        # 6. Сохраняем ID текущего окна
         original_window = driver.current_window_handle
 
-        # 5.2 Получаем список всех открытых окон и переключаемся на последнее
+        # 7. Получаем список всех открытых окон и переключаемся на последнее
         for window_handle in driver.window_handles:
             if window_handle != original_window:
                 driver.switch_to.window(window_handle)
                 break
 
-        # 5.3 Теперь можно искать кнопку
+        # 8. Теперь можно искать кнопку
         driver.find_element(By.XPATH, "//button[text()='Save']").click()
 
         # Если нужно вернуться назад: # driver.switch_to.window(original_window) - но не нужно - окно само закрывается!
 
-        # 5.4 Восстанавливаем исходное позиционирование на весь документ
+        # 9. Восстанавливаем исходное позиционирование на весь документ
         driver.switch_to.default_content()
 
     ##################################################################################################################################################
@@ -124,36 +135,7 @@ class InventoryHelper:
 
     def Delete_first_inventory(self):
 
-        # 1. В переменную driver передаем драйвер из фикстуры Application
-        driver = self.app.driver
-
-        # 2. Выбрать первую группу   <div class="x-grid3-cell-inner x-grid3-col-0" unselectable="on">Toetomi Hideyosi</div>
-        driver.switch_to.frame("mainframe")  # Сначала нужно переключиться на фрейм
-        driver.find_element(By.XPATH, "//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']").click()
-
-        # 3. Open modification window - кнопку Delete нажать     <button type="button" id="ext-gen27"
-        driver.find_element(By.ID, "ext-gen27").click()
-
-        # Открывается окно с вопросами - подтвердить удаление и кнопками YES NO
-
-        # 5. Нажимаем кнопку Yes                 <button type="button" id="ext-gen48" class=" x-btn-text">Save</button>
-
-        # 5.1 Сохраняем ID текущего окна
-        original_window = driver.current_window_handle
-
-        # 5.2 Получаем список всех открытых окон и переключаемся на последнее
-        for window_handle in driver.window_handles:
-            if window_handle != original_window:
-                driver.switch_to.window(window_handle)
-                break
-
-        # 5.3 Теперь можно искать кнопку
-        driver.find_element(By.XPATH, "//button[text()='Yes']").click()
-
-        # Если нужно вернуться назад: # driver.switch_to.window(original_window) - но не нужно - окно само закрывается!
-
-        # 5.4 Восстанавливаем исходное позиционирование на весь документ
-        driver.switch_to.default_content()
+        self.Delete_inventory_by_index(0)
 
     ##################################################################################################################################################
     # Метод возвращающий список всех элементов inventory со всем параметрами:
@@ -286,14 +268,25 @@ class InventoryHelper:
     # Метод изменяющий атрибут инвентаря если он не пустой
     ##################################################################################################################################################
 
-    def Change_Field_Value(self, text, field_id):
+    def Change_Field_Value(self, text_value, field_name):
 
         driver = self.app.driver
 
-        if text is not None:
-            driver.find_element(By.ID, field_id).click()
-            driver.find_element(By.ID, field_id).clear()
-            driver.find_element(By.ID, field_id).send_keys(text)
+        if field_name == "editOwner":
+
+            # Если поле выпадающий список:
+            if text_value is not None:
+
+                # 3.3 Заполняем поле owner:
+                driver.find_element(By.ID, "editOwner").click()
+                dropdown = driver.find_element(By.ID, "editOwner")
+                dropdown.find_element(By.XPATH,"//div[contains(@class, 'x-combo-list-item') and text()='%s']" %  text_value  ).click()
+
+        else:  # Если обычное поле:
+            if text_value is not None:
+                driver.find_element(By.ID, field_name).click()
+                driver.find_element(By.ID, field_name).clear()
+                driver.find_element(By.ID, field_name).send_keys(text_value)
 
     ####################################################################################################################
     # Метод заполняющий все поля элемента инвентаря
@@ -303,7 +296,7 @@ class InventoryHelper:
 
         self.Change_Field_Value(inventory_item.Inventory_Hostname, "editName")
         self.Change_Field_Value(inventory_item.Inventory_IPaddress, "editIp")
-        # Owner пока менять не будем. Может позже добавим обработку сюда.
+        self.Change_Field_Value(inventory_item.Inventory_Owner, "editOwner")
         self.Change_Field_Value(inventory_item.Inventory_Purpose, "editPurpose")
         self.Change_Field_Value(inventory_item.Inventory_Hardware, "editHw")
         self.Change_Field_Value(inventory_item.Inventory_Notes, "editNotes")
@@ -351,7 +344,7 @@ class InventoryHelper:
             element = driver.find_element(By.CSS_SELECTOR, "h1.title") # Если элемент есть, то мы уже на нужной странице
             if element is not None:
                 driver.switch_to.default_content()          # Восстанавливаем исходное позиционирование на весь документ
-                return
+                return                                      #                     И уходим так как все что нужно сделали
         except NoSuchElementException:
             pass
 
