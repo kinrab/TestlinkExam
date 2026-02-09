@@ -180,4 +180,4 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 .idea/vcs.xml
-allure/*
+allure-results/*
