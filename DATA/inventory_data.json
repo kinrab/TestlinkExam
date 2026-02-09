@@ -1,0 +1,92 @@
+[
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:GGARp2kxRogMGRVZo2d",
+    "Inventory_IPaddress": "96.76.133.198",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:gWqydaika2UZqO6",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:Dp2byxsrzjX1QjnfREXdJIE"
+  },
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:UGuFpGkdu61DnYdBa",
+    "Inventory_IPaddress": "181.235.23.172",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:4fMVbbaF6yhet",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:r0wNX40Z5WktqtxyNDpvIbo0hsQJDhATrFJVt"
+  },
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:vebaYe7CV5o",
+    "Inventory_IPaddress": "181.171.20.251",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:zwQO0QbdOAQUBT",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:ky3FuTlLwf3D6"
+  },
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:VAVRoed1NLkW9W0OYgf",
+    "Inventory_IPaddress": "170.148.34.61",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:QV3pul3XFvBhpNHJVM",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:TcjYjclo4ZG204aUBLjqBz68XDvSrn8g3JVn5d"
+  },
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:X3T0k8S4vd3oYMUEk",
+    "Inventory_IPaddress": "46.103.189.68",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:3YCkGkZqNnXsWUu1P",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:ZUCQQTvDcHNtrQ1of95qvGf5UwuQR3"
+  },
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:LFcSRCicOHIna",
+    "Inventory_IPaddress": "167.59.38.56",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:ugXqbNXzUkweJdLi8",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:dP6sBSJmOQsyNkYIesmIB3An4uzbJHbGh"
+  },
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:cBiwdevjCQV",
+    "Inventory_IPaddress": "12.49.117.93",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:sbTAgInh96OSFod",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:IBXe8eLDFENTaXjgXoInqRvgvT1"
+  },
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:5hre0iZofG2Gqja3Cn",
+    "Inventory_IPaddress": "243.53.120.91",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:0uvoDtzm8pXlOpXgo6e",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:TRpcDwLbwIcd494SeGG"
+  },
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:UPhcgxqx5j7ifXtYZ",
+    "Inventory_IPaddress": "21.50.137.39",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:oUZCyYehlOJnnMldO",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:UqZgVG0E6Gx0nvJBICohNxxUJ1SSjkLtMiW5kc"
+  },
+  {
+    "py/object": "DATAMODEL.inventory_data_model.Inventory",
+    "Inventory_Hostname": "Name:6ySk3A6ZHfqPG53",
+    "Inventory_IPaddress": "85.85.37.42",
+    "Inventory_Owner": "testmanager",
+    "Inventory_Purpose": "Purpose:43puSuc0TsCUsfO",
+    "Inventory_Hardware": "Vegman R320",
+    "Inventory_Notes": "Notes:rEeJBXcibscLaPBDmvJtSYW"
+  }
+]

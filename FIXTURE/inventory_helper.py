@@ -1,6 +1,6 @@
 from selenium.common.exceptions import NoSuchElementException # Важный импорт
 from selenium.webdriver.common.by import By
-from DATAMODEL.inventory_data import Inventory
+from DATAMODEL.inventory_data_model import Inventory
 
 ########################################################################################################################################################################################
 # Класс для реализации всех вспомогательных методов работающих с сущностью Inventory (testbeds)

@@ -7,37 +7,11 @@
 # Как запустить генератор из командной строки чтобы он нашел import:
 #    python -m generator.generate_inventory
 
-from  DATAMODEL.inventory_data import Inventory
+from DATA.data_inventory import *
 import os.path
-import random
-import string
 import jsonpickle
 import getopt
 import sys
-
-########################################################################################################################
-# Функция генерирует случайные строик с заданным в переменной prefix префиксом и длинной не более maxlen
-########################################################################################################################
-def random_string (prefix, maxlen):
-
-    symbols_list =  string.ascii_letters + string.digits
-    return prefix + "".join( [ random.choice(symbols_list) for i in range( random.randrange(maxlen)) ] )
-
-########################################################################################################################
-# Функция генерирует случайное число от 1 до 254
-########################################################################################################################
-
-def random_digit(min_val=1, max_val=254):
-
-    return str(random.randint(min_val, max_val))
-
-########################################################################################################################
-# Функция Генерирует случайный IPv4 адрес, соединяя 4 случайных числа точками.  Используем random_string
-########################################################################################################################
-
-def generate_random_ip():
-
-    return ".".join([random_digit() for _ in range(4)])
 
 ########################################################################################################################
 #  ОСНОВНОЙ КОД ЗАПУСКА:
@@ -66,7 +40,7 @@ for o , a in opts:
 test_data = [
              Inventory
              (
-                 Inventory_Hostname= random_string("Name:", 10),
+                 Inventory_Hostname= random_string("Name:", 20),
                  Inventory_IPaddress = generate_random_ip(),
                  Inventory_Owner ="testmanager",                                           # Этот элемент не буду менять.
                  Inventory_Purpose = random_string("Purpose:", 20),

@@ -1,5 +1,7 @@
 
 from FIXTURE.fixture_application import Application
+import jsonpickle
+import importlib
 import pytest
 import os.path
 import json
@@ -91,3 +93,41 @@ def load_config(file):
 
 def pytest_addoption(parser):
     parser.addoption("--config", action="store", default="config.json" )
+
+##########################################################################################################################################################################################
+# Добавляем функции для обработки динамической параметризации через METAFUNC pytest_generate_tests(metafunc)
+##########################################################################################################################################################################################
+#
+# metafunc в Python — это объект, используемый в фреймворке pytest внутри хук-функции pytest_generate_tests для динамической параметризации тестов.
+# Он позволяет генерировать тестовые случаи «на лету», анализировать аргументы функций и создавать вариации тестов без использования
+# декоратора @pytest.mark.parametrize для каждого случая.
+
+def pytest_generate_tests(metafunc):
+
+    for AppFixture in metafunc.fixturenames:
+
+        if AppFixture.startswith("data_"):
+
+            test_data = load_from_module(AppFixture[5:])
+
+            metafunc.parametrize(AppFixture, test_data, ids=[str(x) for x in test_data])
+
+        elif AppFixture.startswith("json_"):
+
+            test_data = load_from_json_file(AppFixture[5:])
+
+            metafunc.parametrize(AppFixture,test_data, ids=[str(x) for x in test_data])
+
+
+
+def load_from_module (module):
+
+    str_name = "DATA.%s" % module
+    x = importlib.import_module(str_name).test_data_a # Или можно взять constant из файла DATA\data_inventory.py
+    return x
+
+def load_from_json_file (file):
+
+    with open( os.path.join(os.path.dirname(os.path.abspath(__file__)),"DATA/%s.json" % file)) as f:
+        return jsonpickle.decode(f.read())
+
