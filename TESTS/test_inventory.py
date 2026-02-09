@@ -111,7 +111,7 @@ def test_add_inventory_load_from_json_file(app, json_inventory_data ):
 #
 def test_modify_some_inventory(app, data_data_inventory):
 
-    inventory_item = data_inventory_data
+    inventory_item = data_data_inventory
 
     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
     with allure.step(f'Open main window'):
