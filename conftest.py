@@ -123,11 +123,15 @@ def pytest_generate_tests(metafunc):
 def load_from_module (module):
 
     str_name = "DATA.%s" % module
+  
     x = importlib.import_module(str_name).test_data_a # Или можно взять constant из файла DATA\data_inventory.py
+    
     return x
+
 
 def load_from_json_file (file):
 
     with open( os.path.join(os.path.dirname(os.path.abspath(__file__)),"DATA/%s.json" % file)) as f:
+
         return jsonpickle.decode(f.read())
 
