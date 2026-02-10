@@ -2,7 +2,7 @@ from DATAMODEL.inventory_data_model import Inventory
 import random
 import string
 
-n = 3 # Генерируем три элемента для test_data
+n = 1 # Генерируем три элемента для test_data
 
 constant_data =\
 [

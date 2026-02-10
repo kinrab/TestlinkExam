@@ -1,5 +1,6 @@
 
 from FIXTURE.fixture_application import Application
+from FIXTURE.db import DbFixture
 import jsonpickle
 import importlib
 import pytest
@@ -37,6 +38,7 @@ def app(request):
     #AppFixture.session.Ensure_Login_process(username =  web_config['username'], password =  web_config['password'])
 
     return AppFixture
+
 
 ##########################################################################################################################################################################################
 #   Фикстура для подготовки к завершению тестов:
@@ -149,3 +151,22 @@ def load_from_json_file (file):
 
         return jsonpickle.decode(f.read())
 
+##########################################################################################################################################################################################
+#   Фикстура для работы с базой данных
+##########################################################################################################################################################################################
+
+@pytest.fixture
+def db(request):
+
+    db_config = load_config(request.config.getoption("--config"))['db']
+
+    dbFixture = DbFixture(host = db_config['host'],
+                          name = db_config['name'],
+                          user = db_config['user'],
+                          password = db_config['password'])
+
+    def fin():
+        dbFixture.destroy()
+
+    request.addfinalizer(fin)
+    return dbFixture

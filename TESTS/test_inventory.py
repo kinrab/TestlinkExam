@@ -108,7 +108,7 @@ import pytest
 # Имя параметра data_inventory_data формируется по правилам:
 #   'data_' префикс для обработки в configtest.py
 #   'inventory_data' название модуля откуда берем данные DATA.data_inventory
-def test_add_inventory_item(app, dataadd_data_inventory ):
+def test_add_inventory_item(app, db, dataadd_data_inventory ):
 
     inventory_item = dataadd_data_inventory
 
@@ -122,7 +122,9 @@ def test_add_inventory_item(app, dataadd_data_inventory ):
 
     # 3. Получим текущий список элементов:
     with allure.step(f'Get old list of inventory'):
-        old_list = app.inventory.Get_inventory_list()
+
+        # old_list = app.inventory.Get_inventory_list()
+        old_list = db.Get_inventory_list()                # Будем брать список сразу из базы данных для ускорения!
 
     # 4. Добавить новый элемент инвенторя (заполнить поля) и сохранить.
     with allure.step(f'Add new inventory item: Host={inventory_item.Inventory_Hostname} IPAddress={inventory_item.Inventory_IPaddress} Owner={inventory_item.Inventory_Owner} Purpose={inventory_item.Inventory_Purpose} HW={inventory_item.Inventory_Hardware} Notes={inventory_item.Inventory_Notes}'):
@@ -136,15 +138,29 @@ def test_add_inventory_item(app, dataadd_data_inventory ):
 
     # 5. Получим новый список элементов:
     with allure.step(f'Get new list of inventory'):
-        new_list = app.inventory.Get_inventory_list()
+
+        # new_list = app.inventory.Get_inventory_list()
+        new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 6. Добавим новый элемент в старый список чтобы списки стали равны:
     with allure.step(f'Add new inventory into old list'):
         old_list.append(NewInventory)
 
+    print("\n OLD LIST \n")
+    for element in old_list:
+        print(element)
+        print("\n")
+
+    print("\n NEW LIST \n")
+    for element in new_list:
+        print(element)
+        print("\n")
+
     # 7. Сравниваем списки применяя сортировку:
     with allure.step(f'Check Assert - lists comparation'):
         assert sorted(old_list) == sorted(new_list)
+
+
 
     # 8. Вернутся на главную страницу
     #with allure.step(f'Return to main window'):
@@ -158,7 +174,7 @@ def test_add_inventory_item(app, dataadd_data_inventory ):
 #   'data_' префикс для обработки в configtest.py
 #   'inventory_data' название модуля откуда берем данные DATA.data_inventory
 #
-def test_modify_some_inventory(app, datamod_data_inventory):
+def test_modify_some_inventory(app, db, datamod_data_inventory):
 
     inventory_item = datamod_data_inventory
 
@@ -189,7 +205,9 @@ def test_modify_some_inventory(app, datamod_data_inventory):
 
     # 4. Получим текущий список элементов:
     with allure.step(f'Get old list of inventory'):
-        old_list = app.inventory.Get_inventory_list()
+
+        #old_list = app.inventory.Get_inventory_list()
+        old_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 5 Выбираем элемент для модификации в диапазоне от 0 до len:
     with allure.step(f'Get random index of inventory item for modification'):
@@ -210,7 +228,9 @@ def test_modify_some_inventory(app, datamod_data_inventory):
 
     # 8. Получим новый список элементов:
     with allure.step(f'Get new list of inventory'):
-        new_list = app.inventory.Get_inventory_list()
+
+        #new_list = app.inventory.Get_inventory_list()
+        new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 9. Модифицируем элемент в старом списке чтобы списки стали равны:
     with allure.step(f'Change item with index={index}'):
@@ -224,13 +244,38 @@ def test_modify_some_inventory(app, datamod_data_inventory):
     #with allure.step(f'Return to main window'):
     #    app.inventory.Open_main_window()
 
+########################################################################################################################################################################
+# Тест проверяющий соответствие списка инвентаря на экране и в  базе данных:
+########################################################################################################################################################################
+
+def test_group_list(app, db):
+
+    # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
+    with allure.step(f'Open main window'):
+        app.inventory.Open_main_window()
+
+    # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
+    with allure.step(f'Open inventory window'):
+        app.inventory.Open_Inventory_window()
+
+    # 3. Берем список инвентаря из WEB UI:
+    with allure.step(f'Get inventory list from WEB UI'):
+        ui_list = app.inventory.Get_inventory_list()
+
+    # 4. Берем спиcок инвенторя из базы данных:
+    with allure.step(f'Get inventory list from DB'):
+        db_list = db.Get_inventory_list()
+
+    # 5. Сравниваем списки:
+    with allure.step(f'Comparation of WEB UI and DB lists'):
+        assert sorted(ui_list) == sorted(db_list)
 
 ########################################################################################################################################################################
 # Тест проверяющий удаление существующего инвентаря (тестовых стендов)
 ########################################################################################################################################################################
 # Повторим тест n раз без входных параметров: range(n))
 @pytest.mark.parametrize("_", range(3))
-def test_delete_some_inventory(app, _):
+def test_delete_some_inventory(app, db, _):
 
     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
     with allure.step(f'Open main window'):
@@ -259,7 +304,9 @@ def test_delete_some_inventory(app, _):
 
     # 4. Получим текущий список элементов:
     with allure.step(f'Get old list of inventory'):
-        old_list = app.inventory.Get_inventory_list()
+
+        #old_list = app.inventory.Get_inventory_list()
+        old_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 5 Выбираем случайный элемент для удаления в диапазоне от 0 до len:
     with allure.step(f'Get random index of inventory item for delete'):
@@ -271,7 +318,9 @@ def test_delete_some_inventory(app, _):
 
     # 7. Получим новый список элементов:
     with allure.step(f'Get new list of inventory'):
-        new_list = app.inventory.Get_inventory_list()
+
+        # new_list = app.inventory.Get_inventory_list()
+        new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 8. Удаляем элемент с индексом index из старого списка чтобы списки стали равны:
     with allure.step(f'Delete item with index = {index} from old list'):
@@ -293,6 +342,7 @@ def test_delete_some_inventory(app, _):
     # for element in list:
     #     print(element)
     #     print("\n")
+
 
 
 
