@@ -42,8 +42,8 @@ def generate_random_ip():
 
     return ".".join([random_digit() for _ in range(4)])
 
-# Вариант 1: генеируем данные для теста модификации элементов
-test_data_a = [
+# Вариант 1: генеируем данные для теста дбавления элементов
+test_data_add = [
              Inventory
              (
                  Inventory_Hostname= random_string("Name:", 20),
@@ -55,7 +55,18 @@ test_data_a = [
 
              ) for _ in range(n)]
 
+# Вариант 1: генеируем данные для теста модификации элементов
+test_data_mod = [
+             Inventory
+             (
+                 Inventory_Hostname= random_string("Name:", 20),
+                 Inventory_IPaddress = generate_random_ip(),
+                 Inventory_Owner ="testmanager",                                           # Этот элемент не буду менять.
+                 Inventory_Purpose = random_string("Purpose:", 20),
+                 Inventory_Hardware="Vegman R320",
+                 Inventory_Notes= random_string("Notes:", 40)
 
+             ) for _ in range(n)]
 
 # Вариант 2: с перебором комбинаторным
 # test_data = [

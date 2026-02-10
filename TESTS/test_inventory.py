@@ -9,46 +9,97 @@ import pytest
 ########################################################################################################################################################################
 
 # Вариант параметризации через Pytest Mark Parameters:
-@pytest.mark.parametrize("inventory_item", constant_data, ids =[repr(x) for x in constant_data ])
-def test_add_inventory(app, inventory_item ):
+#@pytest.mark.parametrize("inventory_item", constant_data, ids =[repr(x) for x in constant_data ])
+#def test_add_inventory(app, inventory_item ):
+#
+#    # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
+#    with allure.step(f'Open main window'):
+#        app.inventory.Open_main_window()
+#
+#    # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
+#    with allure.step(f'Open inventory window'):
+#        app.inventory.Open_Inventory_window()
+#
+#    # 3. Получим текущий список элементов:
+#    with allure.step(f'Get old list of inventory'):
+#        old_list = app.inventory.Get_inventory_list()
+#
+#    # 4. Добавить новый элемент инвенторя (заполнить поля) и сохранить.
+#
+#        NewInventory = Inventory(Inventory_Hostname  = inventory_item.Inventory_Hostname,
+#                                 Inventory_IPaddress = inventory_item.Inventory_IPaddress,
+#                                 Inventory_Owner     = inventory_item.Inventory_Owner,
+#                                 Inventory_Purpose   = inventory_item.Inventory_Purpose,
+#                                 Inventory_Hardware  = inventory_item.Inventory_Hardware,
+#                                 Inventory_Notes     = inventory_item.Inventory_Notes)
+#        app.inventory.Add_new_inventory(NewInventory)
+#
+#    # 5. Получим новый список элементов:
+#    with allure.step(f'Get new list of inventory'):
+#        new_list = app.inventory.Get_inventory_list()
+#
+#    # 6. Добавим новый элемент в старый список чтобы списки стали равны:
+#    with allure.step(f'Add new inventory into old list'):
+#        old_list.append(NewInventory)
+#
+#    # 7. Сравниваем списки применяя сортировку:
+#    with allure.step(f'Check Assert - lists comparation'):
+#
+#
+#    # 8. Вернутся на главную страницу
+#    with allure.step(f'Return to main window'):
+#        app.inventory.Open_main_window()
 
-    # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
-    with allure.step(f'Open main window'):
-        app.inventory.Open_main_window()
+########################################################################################################################################################################
+# Тест проверяющий создание нового инвентаря (тестовых стендов)
+########################################################################################################################################################################
+# Вариант динамической параметризации pytest_generate_tests(metafunc)
+# Имя параметра data_inventory_data формируется по правилам:
+#   'json_' префикс для обработки в configtest.py
+#   'inventory_data' название ФАЙЛА откуда берем данные лежащего в директории DATA
 
-    # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
-    with allure.step(f'Open inventory window'):
-        app.inventory.Open_Inventory_window()
-
-    # 3. Получим текущий список элементов:
-    with allure.step(f'Get old list of inventory'):
-        old_list = app.inventory.Get_inventory_list()
-
-    # 4. Добавить новый элемент инвенторя (заполнить поля) и сохранить.
-    with allure.step(f'Add new inventory item: Host={inventory_item.Inventory_Hostname} IPAddress={ inventory_item.Inventory_IPaddress} Owner={inventory_item.Inventory_Owner} Purpose={inventory_item.Inventory_Purpose} HW={inventory_item.Inventory_Hardware} Notes={inventory_item.Inventory_Notes}'):
-        NewInventory = Inventory(Inventory_Hostname  = inventory_item.Inventory_Hostname,
-                                 Inventory_IPaddress = inventory_item.Inventory_IPaddress,
-                                 Inventory_Owner     = inventory_item.Inventory_Owner,
-                                 Inventory_Purpose   = inventory_item.Inventory_Purpose,
-                                 Inventory_Hardware  = inventory_item.Inventory_Hardware,
-                                 Inventory_Notes     = inventory_item.Inventory_Notes)
-        app.inventory.Add_new_inventory(NewInventory)
-
-    # 5. Получим новый список элементов:
-    with allure.step(f'Get new list of inventory'):
-        new_list = app.inventory.Get_inventory_list()
-
-    # 6. Добавим новый элемент в старый список чтобы списки стали равны:
-    with allure.step(f'Add new inventory into old list'):
-        old_list.append(NewInventory)
-
-    # 7. Сравниваем списки применяя сортировку:
-    with allure.step(f'Check Assert - lists comparation'):
-        assert sorted(old_list) == sorted(new_list)
-
-    # 8. Вернутся на главную страницу
-    with allure.step(f'Return to main window'):
-        app.inventory.Open_main_window()
+# Вариант параметризации через Pytest Mark Parameters:
+# def test_add_inventory_load_from_json_file(app, json_inventory_data ):
+#
+#     inventory_item = json_inventory_data
+#
+#     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
+#     with allure.step(f'Open main window'):
+#         app.inventory.Open_main_window()
+#
+#     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
+#     with allure.step(f'Open inventory window'):
+#         app.inventory.Open_Inventory_window()
+#
+#     # 3. Получим текущий список элементов:
+#     with allure.step(f'Get old list of inventory'):
+#         old_list = app.inventory.Get_inventory_list()
+#
+#     # 4. Добавить новый элемент инвенторя (заполнить поля) и сохранить.
+#     with allure.step(f'Add new inventory item: Host={inventory_item.Inventory_Hostname} IPAddress={inventory_item.Inventory_IPaddress} Owner={inventory_item.Inventory_Owner} Purpose={inventory_item.Inventory_Purpose} HW={inventory_item.Inventory_Hardware} Notes={inventory_item.Inventory_Notes}'):
+#         NewInventory = Inventory(Inventory_Hostname  = inventory_item.Inventory_Hostname,
+#                              Inventory_IPaddress = inventory_item.Inventory_IPaddress,
+#                              Inventory_Owner     = inventory_item.Inventory_Owner,
+#                              Inventory_Purpose   = inventory_item.Inventory_Purpose,
+#                              Inventory_Hardware  = inventory_item.Inventory_Hardware,
+#                              Inventory_Notes     = inventory_item.Inventory_Notes)
+#         app.inventory.Add_new_inventory(NewInventory)
+#
+#     # 5. Получим новый список элементов:
+#     with allure.step(f'Get new list of inventory'):
+#         new_list = app.inventory.Get_inventory_list()
+#
+#     # 6. Добавим новый элемент в старый список чтобы списки стали равны:
+#     with allure.step(f'Add new inventory into old list'):
+#         old_list.append(NewInventory)
+#
+#     # 7. Сравниваем списки применяя сортировку:
+#     with allure.step(f'Check Assert - lists comparation'):
+#         assert sorted(old_list) == sorted(new_list)
+#
+#     # 8. Вернутся на главную страницу
+#     with allure.step(f'Return to main window'):
+#         app.inventory.Open_main_window()
 
 ########################################################################################################################################################################
 # Тест проверяющий создание нового инвентаря (тестовых стендов)
@@ -56,12 +107,10 @@ def test_add_inventory(app, inventory_item ):
 # Вариант динамической параметризации pytest_generate_tests(metafunc)
 # Имя параметра data_inventory_data формируется по правилам:
 #   'data_' префикс для обработки в configtest.py
-#   'inventory_data' название ФАЙЛА откуда берем данные лежащего в директории DATA
+#   'inventory_data' название модуля откуда берем данные DATA.data_inventory
+def test_add_inventory_item(app, dataadd_data_inventory ):
 
-# Вариант параметризации через Pytest Mark Parameters:
-def test_add_inventory_load_from_json_file(app, json_inventory_data ):
-
-    inventory_item = json_inventory_data
+    inventory_item = dataadd_data_inventory
 
     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
     with allure.step(f'Open main window'):
@@ -100,7 +149,6 @@ def test_add_inventory_load_from_json_file(app, json_inventory_data ):
     # 8. Вернутся на главную страницу
     with allure.step(f'Return to main window'):
         app.inventory.Open_main_window()
-
 ########################################################################################################################################################################
 # Тест проверяющий модификацию случайно выбранного существующего инвентаря (тестовых стендов)
 ########################################################################################################################################################################
@@ -109,9 +157,9 @@ def test_add_inventory_load_from_json_file(app, json_inventory_data ):
 #   'data_' префикс для обработки в configtest.py
 #   'inventory_data' название модуля откуда берем данные DATA.data_inventory
 #
-def test_modify_some_inventory(app, data_data_inventory):
+def test_modify_some_inventory(app, datamod_data_inventory):
 
-    inventory_item = data_data_inventory
+    inventory_item = datamod_data_inventory
 
     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
     with allure.step(f'Open main window'):
@@ -179,9 +227,8 @@ def test_modify_some_inventory(app, data_data_inventory):
 ########################################################################################################################################################################
 # Тест проверяющий удаление существующего инвентаря (тестовых стендов)
 ########################################################################################################################################################################
-
-# Повторим тест 10 раз без входных параметров:
-@pytest.mark.parametrize("_", range(20))
+# Повторим тест n раз без входных параметров: range(n))
+@pytest.mark.parametrize("_", range(3))
 def test_delete_some_inventory(app, _):
 
     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.

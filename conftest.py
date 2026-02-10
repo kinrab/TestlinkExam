@@ -106,11 +106,18 @@ def pytest_generate_tests(metafunc):
 
     for AppFixture in metafunc.fixturenames:
 
-        if AppFixture.startswith("data_"):
+        if AppFixture.startswith("dataadd_"): # Если данные для теста ADD берем из модуля...
 
-            test_data = load_from_module(AppFixture[5:])
+            test_data = load_from_module(AppFixture)
 
             metafunc.parametrize(AppFixture, test_data, ids=[str(x) for x in test_data])
+
+        elif AppFixture.startswith("datamod_"):  # Если данные для теста MOD берем из модуля...
+
+            test_data = load_from_module(AppFixture)
+
+            metafunc.parametrize(AppFixture, test_data, ids=[str(x) for x in test_data])
+
 
         elif AppFixture.startswith("json_"):
 
@@ -119,12 +126,19 @@ def pytest_generate_tests(metafunc):
             metafunc.parametrize(AppFixture,test_data, ids=[str(x) for x in test_data])
 
 
-
 def load_from_module (module):
 
-    str_name = "DATA.%s" % module
+    if module == "dataadd_data_inventory":
+
+        str_name = "DATA.%s" % module[8:]
+
+        x = importlib.import_module(str_name).test_data_add  # Или можно взять constant из файла DATA\data_inventory.py
+
+    elif module == "datamod_data_inventory":
+
+        str_name = "DATA.%s" % module[8:]
   
-    x = importlib.import_module(str_name).test_data_a # Или можно взять constant из файла DATA\data_inventory.py
+        x = importlib.import_module(str_name).test_data_mod # Или можно взять constant из файла DATA\data_inventory.py
     
     return x
 
