@@ -9,6 +9,9 @@ import allure
 
 class InventoryHelper:
 
+    # Объявили кэш для использования
+    inventory_cash = None
+
     #################################################################################################################################################
     # Конструктор класса InventoryHelper
     #################################################################################################################################################
@@ -81,6 +84,10 @@ class InventoryHelper:
         # 5. Выходим на основную страницу
         driver.switch_to.default_content()                  # Восстанавливаем исходное позиционирование на весь документ
 
+        # Кэш не валиден после добавления, модификации, удаления
+        self.inventory_cash = None
+
+
     ##################################################################################################################################################
     # Метод модификирующий первый в списке инвентарь - тестовый стенд
     ##################################################################################################################################################
@@ -88,6 +95,7 @@ class InventoryHelper:
     def Modify_first_inventory(self, new_inventory):
 
         self.Modify_inventory_by_index(0, new_inventory)
+
 
     ##################################################################################################################################################
     # Метод модификирующий первый в списке инвентарь - тестовый стенд
@@ -130,6 +138,9 @@ class InventoryHelper:
         # 9. Восстанавливаем исходное позиционирование на весь документ
         driver.switch_to.default_content()
 
+        # 10. Кэш не валиден после добавлени, модификации, удаления
+        self.inventory_cash = None
+
     ##################################################################################################################################################
     # Метод удаляющий первый в списке инвентарь - тестовый стенд
     ##################################################################################################################################################
@@ -138,51 +149,55 @@ class InventoryHelper:
 
         self.Delete_inventory_by_index(0)
 
+
     ##################################################################################################################################################
     # Метод возвращающий список всех элементов inventory со всем параметрами:
     ##################################################################################################################################################
     @allure.step("Get_inventory_list")
     def Get_inventory_list(self):
 
-        # 1. В переменную driver передаем драйвер из фикстуры Application
-        driver = self.app.driver
+        # 0. Проверяем существование валидного кэша
+        if self.inventory_cash is None:
 
-        # 3. Объяаляем пустой список для сохранения элементов
-        inventory_list = []
+            # 1. В переменную driver передаем драйвер из фикстуры Application
+            driver = self.app.driver
 
-        # 4. Сначала нужно переключиться на фрейм:
-        driver.switch_to.frame("mainframe")
+            # 3. Объяаляем пустой список для сохранения элементов
+            inventory_cash = []
 
-        # 5. Проходим по всем элементам inventory на странице
-        for row in driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']"):
+            # 4. Сначала нужно переключиться на фрейм:
+            driver.switch_to.frame("mainframe")
 
-            # 5.1 Ищем и получаем значение атрибута Hostname в Inventory
-            hostname = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']")
+            # 5. Проходим по всем элементам inventory на странице
+            for row in driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']"):
 
-            # 5.2 Ищем и получаем значение атрибута IPaddress в Inventory
-            ipaddress = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-1') and @unselectable='on']")
+                # 5.1 Ищем и получаем значение атрибута Hostname в Inventory
+                hostname = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']")
 
-            # 5.3 Ищем и получаем значение атрибута Purpose в Inventory
-            purpose = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-2') and @unselectable='on']")
+                # 5.2 Ищем и получаем значение атрибута IPaddress в Inventory
+                ipaddress = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-1') and @unselectable='on']")
 
-            # 5.4 Ищем и получаем значение атрибута Hardware в Inventory
-            hardware = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-3') and @unselectable='on']")
+                # 5.3 Ищем и получаем значение атрибута Purpose в Inventory
+                purpose = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-2') and @unselectable='on']")
 
-            # 5.5 Ищем и получаем значение атрибута Owner в Inventory
-            owner = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-4') and @unselectable='on']")
+                # 5.4 Ищем и получаем значение атрибута Hardware в Inventory
+                hardware = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-3') and @unselectable='on']")
 
-            # 5.6 Ищем и получаем значение атрибута Notes в Inventory
-            notes = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-5') and @unselectable='on']")
+                # 5.5 Ищем и получаем значение атрибута Owner в Inventory
+                owner = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-4') and @unselectable='on']")
 
-            inventory_list.append( Inventory ( Inventory_Hostname = hostname.text, Inventory_IPaddress = ipaddress.text, Inventory_Owner = owner.text,
-                                               Inventory_Purpose = purpose.text, Inventory_Hardware = hardware.text, Inventory_Notes = notes.text ) )
+                # 5.6 Ищем и получаем значение атрибута Notes в Inventory
+                notes = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-5') and @unselectable='on']")
 
-        # End for
+                inventory_cash.append( Inventory ( Inventory_Hostname = hostname.text, Inventory_IPaddress = ipaddress.text, Inventory_Owner = owner.text,
+                                                   Inventory_Purpose = purpose.text, Inventory_Hardware = hardware.text, Inventory_Notes = notes.text ) )
 
-        # 5. Восстанавливаем исходное позиционирование на весь документ
-        driver.switch_to.default_content()
+            # End for
 
-        return list(inventory_list)
+            # 5. Восстанавливаем исходное позиционирование на весь документ
+            driver.switch_to.default_content()
+
+        return list(self.inventory_cash)
 
     ##################################################################################################################################################
     # Метод возвращающий число элементов инвентаря
@@ -242,6 +257,9 @@ class InventoryHelper:
 
         # 4. Восстанавливаем исходное позиционирование на весь документ
         driver.switch_to.default_content()
+
+        # 5. Кэш не валиден после добавления, модификации, удаления
+        self.inventory_cash = None
 
     ##################################################################################################################################################
     # Метод выбирает на экране инвентаря нужный элемент по индексу (считая сверху - вниз)
