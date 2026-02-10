@@ -47,8 +47,8 @@ import pytest
 #
 #
 #    # 8. Вернутся на главную страницу
-#    with allure.step(f'Return to main window'):
-#        app.inventory.Open_main_window()
+#    #with allure.step(f'Return to main window'):
+#    #    app.inventory.Open_main_window()
 
 ########################################################################################################################################################################
 # Тест проверяющий создание нового инвентаря (тестовых стендов)
@@ -98,8 +98,8 @@ import pytest
 #         assert sorted(old_list) == sorted(new_list)
 #
 #     # 8. Вернутся на главную страницу
-#     with allure.step(f'Return to main window'):
-#         app.inventory.Open_main_window()
+#     #with allure.step(f'Return to main window'):
+#     #    app.inventory.Open_main_window()
 
 ########################################################################################################################################################################
 # Тест проверяющий создание нового инвентаря (тестовых стендов)
@@ -147,8 +147,9 @@ def test_add_inventory_item(app, dataadd_data_inventory ):
         assert sorted(old_list) == sorted(new_list)
 
     # 8. Вернутся на главную страницу
-    with allure.step(f'Return to main window'):
-        app.inventory.Open_main_window()
+    #with allure.step(f'Return to main window'):
+    #    app.inventory.Open_main_window()
+
 ########################################################################################################################################################################
 # Тест проверяющий модификацию случайно выбранного существующего инвентаря (тестовых стендов)
 ########################################################################################################################################################################
@@ -220,8 +221,8 @@ def test_modify_some_inventory(app, datamod_data_inventory):
         assert sorted(old_list) == sorted(new_list)
 
     # 11. Вернутся на главную страницу
-    with allure.step(f'Return to main window'):
-        app.inventory.Open_main_window()
+    #with allure.step(f'Return to main window'):
+    #    app.inventory.Open_main_window()
 
 
 ########################################################################################################################################################################
@@ -281,8 +282,8 @@ def test_delete_some_inventory(app, _):
         assert sorted(old_list) == sorted(new_list)
 
     # 10. Вернутся на главную страницу
-    with allure.step(f'Return to main window'):
-        app.inventory.Open_main_window()
+    #with allure.step(f'Return to main window'):
+    #    app.inventory.Open_main_window()
 
 
     # Распечатаем оставшийся список если интересно:
