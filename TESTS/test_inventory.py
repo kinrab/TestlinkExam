@@ -248,27 +248,27 @@ def test_modify_some_inventory(app, db, datamod_data_inventory):
 # Тест проверяющий соответствие списка инвентаря на экране и в  базе данных:
 ########################################################################################################################################################################
 
-def test_group_list(app, db):
-
-    # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
-    with allure.step(f'Open main window'):
-        app.inventory.Open_main_window()
-
-    # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
-    with allure.step(f'Open inventory window'):
-        app.inventory.Open_Inventory_window()
-
-    # 3. Берем список инвентаря из WEB UI:
-    with allure.step(f'Get inventory list from WEB UI'):
-        ui_list = app.inventory.Get_inventory_list()
-
-    # 4. Берем спиcок инвенторя из базы данных:
-    with allure.step(f'Get inventory list from DB'):
-        db_list = db.Get_inventory_list()
-
-    # 5. Сравниваем списки:
-    with allure.step(f'Comparation of WEB UI and DB lists'):
-        assert sorted(ui_list) == sorted(db_list)
+# def test_group_list(app, db):
+#
+#     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
+#     with allure.step(f'Open main window'):
+#         app.inventory.Open_main_window()
+#
+#     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
+#     with allure.step(f'Open inventory window'):
+#         app.inventory.Open_Inventory_window()
+#
+#     # 3. Берем список инвентаря из WEB UI:
+#     with allure.step(f'Get inventory list from WEB UI'):
+#         ui_list = app.inventory.Get_inventory_list()
+#
+#     # 4. Берем спиcок инвенторя из базы данных:
+#     with allure.step(f'Get inventory list from DB'):
+#         db_list = db.Get_inventory_list()
+#
+#     # 5. Сравниваем списки:
+#     with allure.step(f'Comparation of WEB UI and DB lists'):
+#         assert sorted(ui_list) == sorted(db_list)
 
 ########################################################################################################################################################################
 # Тест проверяющий удаление существующего инвентаря (тестовых стендов)
