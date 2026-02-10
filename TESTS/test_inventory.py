@@ -139,22 +139,22 @@ def test_add_inventory_item(app, db, dataadd_data_inventory ):
     # 5. Получим новый список элементов:
     with allure.step(f'Get new list of inventory'):
 
-        # new_list = app.inventory.Get_inventory_list()
-        new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
+        new_list = app.inventory.Get_inventory_list()
+        #new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 6. Добавим новый элемент в старый список чтобы списки стали равны:
     with allure.step(f'Add new inventory into old list'):
         old_list.append(NewInventory)
 
-    print("\n OLD LIST \n")
-    for element in old_list:
-        print(element)
-        print("\n")
-
-    print("\n NEW LIST \n")
-    for element in new_list:
-        print(element)
-        print("\n")
+    # print("\n OLD LIST \n")
+    # for element in old_list:
+    #     print(element)
+    #     print("\n")
+    #
+    # print("\n NEW LIST \n")
+    # for element in new_list:
+    #     print(element)
+    #     print("\n")
 
     # 7. Сравниваем списки применяя сортировку:
     with allure.step(f'Check Assert - lists comparation'):
@@ -229,8 +229,8 @@ def test_modify_some_inventory(app, db, datamod_data_inventory):
     # 8. Получим новый список элементов:
     with allure.step(f'Get new list of inventory'):
 
-        #new_list = app.inventory.Get_inventory_list()
-        new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
+        new_list = app.inventory.Get_inventory_list()
+        #new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 9. Модифицируем элемент в старом списке чтобы списки стали равны:
     with allure.step(f'Change item with index={index}'):
@@ -319,8 +319,8 @@ def test_delete_some_inventory(app, db, _):
     # 7. Получим новый список элементов:
     with allure.step(f'Get new list of inventory'):
 
-        # new_list = app.inventory.Get_inventory_list()
-        new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
+        new_list = app.inventory.Get_inventory_list()
+        #new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 8. Удаляем элемент с индексом index из старого списка чтобы списки стали равны:
     with allure.step(f'Delete item with index = {index} from old list'):
