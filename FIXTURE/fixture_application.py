@@ -1,3 +1,5 @@
+
+from selenium.common.exceptions import WebDriverException
 from FIXTURE.session_helper import SessionHelper
 from FIXTURE.inventory_helper import InventoryHelper
 from selenium  import webdriver
@@ -43,11 +45,10 @@ class Application:
     ####################################################################################################################
 
     def is_valid(self):
-
         try:
-            self.driver.current_url
-            return True
-        except:
+             # Проверяем, что драйвер вообще живой и отвечает
+            return self.driver.current_url is not None
+        except WebDriverException:
             return False
 
     ####################################################################################################################
