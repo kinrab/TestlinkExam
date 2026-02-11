@@ -80,8 +80,10 @@ class SessionHelper:
         driver = self.app.driver
         app = self.app
 
-        # 1. Открыть ссылку на testlink
-        driver.get(app.base_url)
+        # 1. Открыть ссылку на testlink только при первом запуске браузера!
+        str = app.base_url + "index.php"
+        if driver.current_url != str:
+            driver.get(app.base_url)
 
         # 2. Проверим залогинены мы или нет?
         Flag = self.Is_Logged_In()

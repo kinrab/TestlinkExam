@@ -351,7 +351,7 @@ class InventoryHelper:
 
         # 2. Ищем элемент <h1 class="title">Inventory</h1>
         try:
-            driver.switch_to.frame("titlebar")                                    # Сначала нужно переключиться на фрейм
+            driver.switch_to.frame("mainframe")                                    # Сначала нужно переключиться на фрейм
             element = driver.find_element(By.CSS_SELECTOR, "h1.title") # Если элемент есть, то мы уже на нужной странице
             if element is not None:
                 driver.switch_to.default_content()          # Восстанавливаем исходное позиционирование на весь документ
