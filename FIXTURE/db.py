@@ -1,6 +1,5 @@
 
 from DATAMODEL.inventory_data_model import Inventory
-#import mysql.connector
 import pymysql
 import re
 
@@ -32,13 +31,13 @@ class DbFixture:
         # 1. Сбрасываем состояние транзакции, чтобы увидеть свежие данные
         #self.connection.rollback()
 
-        self.connection = pymysql.connect(**config)
+        connection = pymysql.connect(**config)
 
         try:
-            with self.connection.cursor() as cursor:
+            with connection.cursor() as cursor:
 
                 # На всякий случай сбрасываем состояние
-                self.connection.rollback()
+                connection.rollback()
 
                 cursor.execute("select name, ipaddress, owner_id, content from inventory")
 
@@ -73,8 +72,8 @@ class DbFixture:
                                 )
 
         finally:
-            self.connection.commit()
-            self.connection.close()
+            connection.commit()
+            connection.close()
 
         return list
 
@@ -84,4 +83,36 @@ class DbFixture:
 
         # self.connection.close()
         #pass #self.connection.close()
+
+
+    def Get_count_of_inventory(self):
+
+        list = []
+
+        count = -1 # Будет означать ошибку
+
+        # 1. Сбрасываем состояние транзакции, чтобы увидеть свежие данные
+        #self.connection.rollback()
+
+        connection = pymysql.connect(**config)
+
+        try:
+            with connection.cursor() as cursor:
+
+                # На всякий случай сбрасываем состояние
+                connection.rollback()
+
+                cursor.execute("select COUNT(*) from inventory")
+
+                rows = cursor.fetchall()
+
+                count = rows[0]['COUNT(*)']
+
+        finally:
+            connection.commit()
+            connection.close()
+
+        # -1 - будем считать неопределенным ответом и ошибкой.
+
+        return count
 

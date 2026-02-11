@@ -1,8 +1,10 @@
-
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 from DATA.data_inventory import *
 from random import randrange
 import allure
 import pytest
+import time
 
 ########################################################################################################################################################################
 # Тест проверяющий создание нового инвентаря (тестовых стендов)
@@ -136,28 +138,31 @@ def test_add_inventory_item(app, db, dataadd_data_inventory ):
                              Inventory_Notes     = inventory_item.Inventory_Notes)
         app.inventory.Add_new_inventory(NewInventory)
 
-    # 5. Получим новый список элементов:
-    with allure.step(f'Get new list of inventory'):
-
-        new_list = app.inventory.Get_inventory_list()
-        #new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
-
-    # 6. Добавим новый элемент в старый список чтобы списки стали равны:
+    # 5. Добавим новый элемент в старый список чтобы списки стали равны:
     with allure.step(f'Add new inventory into old list'):
         old_list.append(NewInventory)
 
-    # print("\n OLD LIST \n")
-    # for element in old_list:
-    #     print(element)
-    #     print("\n")
-    #
-    # print("\n NEW LIST \n")
-    # for element in new_list:
-    #     print(element)
-    #     print("\n")
+    # 6. Ждем пока новый элемент добавится в базу - то есть завершится транзакция:
+    expected_count = len(old_list)
+
+    # 7. Explicit Waits (явные ожидания) вместо time.sleep(1)
+    try:
+        # Ждем максимум 3 секунд, проверяя условие каждые 100-500 мс
+        WebDriverWait(app.driver, timeout=3).until(lambda d: db.Get_count_of_inventory()  == expected_count)
+        #print("Транзакция завершена, данные в базе!")
+
+    except:
+        print("Error: Данные так и не обновились за 5 секунд")
+        pass
+
+
+    with allure.step(f'Get new list of inventory'):
+        # new_list = app.inventory.Get_inventory_list()
+        new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 7. Сравниваем списки применяя сортировку:
     with allure.step(f'Check Assert - lists comparation'):
+        assert len(old_list) == len(new_list)
         assert sorted(old_list) == sorted(new_list)
 
 
@@ -226,17 +231,28 @@ def test_modify_some_inventory(app, db, datamod_data_inventory):
     with allure.step(f'Modify inventory item index={index}'):
         app.inventory.Modify_inventory_by_index(index, ModInventory)
 
-    # 8. Получим новый список элементов:
-    with allure.step(f'Get new list of inventory'):
-
-        new_list = app.inventory.Get_inventory_list()
-        #new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
-
-    # 9. Модифицируем элемент в старом списке чтобы списки стали равны:
+    # 8. Модифицируем элемент в старом списке чтобы списки стали равны:
     with allure.step(f'Change item with index={index}'):
         old_list[index] = ModInventory
 
-    # 10. Сравниваем списки применяя сортировку:
+    # 9. Ждем пока новый элемент добавится в базу - то есть завершится транзакция:
+    expected_count = len
+
+    # 9. Explicit Waits (явные ожидания) вместо time.sleep(1)
+    try:
+        # Ждем максимум 3 секунд, проверяя условие каждые 100-500 мс
+        WebDriverWait(app.driver, timeout=3).until(lambda d: db.Get_inventory_list() == expected_count)
+        # print("Транзакция завершена, данные в базе!")
+
+    except TimeoutException:
+        #print("Error: modify test: Данные так и не обновились за 5 секунд")
+        pass
+
+    # 10. Получим новый список элементов:
+    with allure.step(f'Get new list of inventory'):
+        new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
+
+    # 12. Сравниваем списки применяя сортировку:
     with allure.step(f'Check Assert - lists comparation'):
         assert sorted(old_list) == sorted(new_list)
 
@@ -316,11 +332,24 @@ def test_delete_some_inventory(app, db, _):
     with allure.step(f'Delete random inventory item with index = {index}'):
         app.inventory.Delete_inventory_by_index(index)
 
+    # 7. Ждем пока новый элемент добавится в базу - то есть завершится транзакция:
+    expected_count = len - 1
+
+    # 7. Explicit Waits (явные ожидания) вместо time.sleep(1)
+    try:
+        # Ждем максимум 3 секунд, проверяя условие каждые 100-500 мс
+        WebDriverWait(app.driver, timeout=3).until(lambda d: db.Get_count_of_inventory() == expected_count)
+        # print("Транзакция завершена, данные в базе!")
+
+    except:
+        print("Error: delete test: Данные так и не обновились за 5 секунд")
+        pass
+
     # 7. Получим новый список элементов:
     with allure.step(f'Get new list of inventory'):
 
-        new_list = app.inventory.Get_inventory_list()
-        #new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
+        #new_list = app.inventory.Get_inventory_list()
+        new_list = db.Get_inventory_list()  # Будем брать список сразу из базы данных для ускорения!
 
     # 8. Удаляем элемент с индексом index из старого списка чтобы списки стали равны:
     with allure.step(f'Delete item with index = {index} from old list'):
