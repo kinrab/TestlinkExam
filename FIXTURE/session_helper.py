@@ -23,7 +23,7 @@ class SessionHelper:
         driver = self.app.driver
 
         # Открыть страницу приложения!
-        driver.get(self.app.base_url)
+        #driver.get(self.app.base_url)
 
         # Ввод в поле логина admin
         driver.find_element(By.NAME, "tl_login").click()
