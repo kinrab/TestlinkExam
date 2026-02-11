@@ -113,8 +113,8 @@ def test_add_inventory_item(app, db, dataadd_data_inventory ):
     inventory_item = dataadd_data_inventory
 
     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
-    with allure.step(f'Open main window'):
-        app.inventory.Open_main_window()
+    #with allure.step(f'Open main window'):
+    #    app.inventory.Open_main_window()
 
     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
     with allure.step(f'Open inventory window'):
@@ -179,8 +179,8 @@ def test_modify_some_inventory(app, db, datamod_data_inventory):
     inventory_item = datamod_data_inventory
 
     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
-    with allure.step(f'Open main window'):
-        app.inventory.Open_main_window()
+    #with allure.step(f'Open main window'):
+    #    app.inventory.Open_main_window()
 
     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
     with allure.step(f'Open inventory window'):
@@ -251,8 +251,8 @@ def test_modify_some_inventory(app, db, datamod_data_inventory):
 # def test_group_list(app, db):
 #
 #     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
-#     with allure.step(f'Open main window'):
-#         app.inventory.Open_main_window()
+#     #with allure.step(f'Open main window'):
+#     #    app.inventory.Open_main_window()
 #
 #     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
 #     with allure.step(f'Open inventory window'):
@@ -278,8 +278,8 @@ def test_modify_some_inventory(app, db, datamod_data_inventory):
 def test_delete_some_inventory(app, db, _):
 
     # 1. Открыть основное окно - так как оно может быть не открыто после другого теста.
-    with allure.step(f'Open main window'):
-        app.inventory.Open_main_window()
+    #with allure.step(f'Open main window'):
+    #    app.inventory.Open_main_window()
 
     # 2. Нажать на пункт меню Inventory и открыть на экране зону работы с инвентарем.
     with allure.step(f'Open inventory window'):
