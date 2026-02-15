@@ -1,6 +1,8 @@
 from selenium.common.exceptions import NoSuchElementException # Важный импорт
-from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from DATAMODEL.inventory_data_model import Inventory
+from selenium.webdriver.common.by import By
 import allure
 
 ########################################################################################################################################################################################
@@ -151,46 +153,81 @@ class InventoryHelper:
     def Get_inventory_list(self):
 
         if self.inventory_cash is None:
-
-            # 1. В переменную driver передаем драйвер из фикстуры Application
             driver = self.app.driver
-
-            # 3. Объяаляем пустой список для сохранения элементов
             self.inventory_cash = []
 
-            # 4. Сначала нужно переключиться на фрейм:
             driver.switch_to.frame("mainframe")
 
-            # 5. Проходим по всем элементам inventory на странице
-            for row in driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']"):
+            # 1. Забираем ВСЕ ячейки одним запросом.
+            # Селектор ищет все div с нужными классами внутри таблиц строк.
+            cells = driver.find_elements(By.XPATH,"//table[@class='x-grid3-row-table']//div[contains(@class, 'x-grid3-col-') and @unselectable='on']")
 
-                # 5.1 Ищем и получаем значение атрибута Hostname в Inventory
-                hostname = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']")
+            # 2. Итерируемся по списку с шагом 6 (количество колонок)
+            for i in range(0, len(cells), 6):
+                # Берем срез из 6 элементов для текущей строки
+                row_cells = cells[i:i + 6]
 
-                # 5.2 Ищем и получаем значение атрибута IPaddress в Inventory
-                ipaddress = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-1') and @unselectable='on']")
+                # Предварительно извлекаем текст, чтобы не обращаться к .text в конструкторе многократно
+                # (Это еще немного ускорит процесс)
+                t = [cell.text for cell in row_cells]
 
-                # 5.3 Ищем и получаем значение атрибута Purpose в Inventory
-                purpose = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-2') and @unselectable='on']")
+                self.inventory_cash.append(Inventory(
+                    Inventory_Hostname=t[0],
+                    Inventory_IPaddress=t[1],
+                    Inventory_Purpose=t[2],
+                    Inventory_Hardware=t[3],
+                    Inventory_Owner=t[4],
+                    Inventory_Notes=t[5]
+                ))
 
-                # 5.4 Ищем и получаем значение атрибута Hardware в Inventory
-                hardware = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-3') and @unselectable='on']")
-
-                # 5.5 Ищем и получаем значение атрибута Owner в Inventory
-                owner = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-4') and @unselectable='on']")
-
-                # 5.6 Ищем и получаем значение атрибута Notes в Inventory
-                notes = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-5') and @unselectable='on']")
-
-                self.inventory_cash.append( Inventory ( Inventory_Hostname = hostname.text, Inventory_IPaddress = ipaddress.text, Inventory_Owner = owner.text,
-                                                   Inventory_Purpose = purpose.text, Inventory_Hardware = hardware.text, Inventory_Notes = notes.text ) )
-
-            # End for
-
-            # 5. Восстанавливаем исходное позиционирование на весь документ
             driver.switch_to.default_content()
 
         return list(self.inventory_cash)
+
+
+
+        # Мой исходный неоптимальный вариант:
+        # if self.inventory_cash is None:
+        #
+        #     # 1. В переменную driver передаем драйвер из фикстуры Application
+        #     driver = self.app.driver
+        #
+        #     # 3. Объяаляем пустой список для сохранения элементов
+        #     self.inventory_cash = []
+        #
+        #     # 4. Сначала нужно переключиться на фрейм:
+        #     driver.switch_to.frame("mainframe")
+        #
+        #     # 5. Проходим по всем элементам inventory на странице
+        #     for row in driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']"):
+        #
+        #         # 5.1 Ищем и получаем значение атрибута Hostname в Inventory
+        #         hostname = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-0') and @unselectable='on']")
+        #
+        #         # 5.2 Ищем и получаем значение атрибута IPaddress в Inventory
+        #         ipaddress = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-1') and @unselectable='on']")
+        #
+        #         # 5.3 Ищем и получаем значение атрибута Purpose в Inventory
+        #         purpose = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-2') and @unselectable='on']")
+        #
+        #         # 5.4 Ищем и получаем значение атрибута Hardware в Inventory
+        #         hardware = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-3') and @unselectable='on']")
+        #
+        #         # 5.5 Ищем и получаем значение атрибута Owner в Inventory
+        #         owner = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-4') and @unselectable='on']")
+        #
+        #         # 5.6 Ищем и получаем значение атрибута Notes в Inventory
+        #         notes = row.find_element(By.XPATH, ".//div[contains(@class, 'x-grid3-col-5') and @unselectable='on']")
+        #
+        #         self.inventory_cash.append( Inventory ( Inventory_Hostname = hostname.text, Inventory_IPaddress = ipaddress.text, Inventory_Owner = owner.text,
+        #                                            Inventory_Purpose = purpose.text, Inventory_Hardware = hardware.text, Inventory_Notes = notes.text ) )
+        #
+        #     # End for
+        #
+        #     # 5. Восстанавливаем исходное позиционирование на весь документ
+        #     driver.switch_to.default_content()
+        #
+        # return list(self.inventory_cash)
 
     ##################################################################################################################################################
     # Метод возвращающий число элементов инвентаря
@@ -205,7 +242,12 @@ class InventoryHelper:
         driver.switch_to.frame("mainframe")
 
         # 3. Посчитать количество контактов:
-        count = len( driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']") )
+
+        #  Старый способ не очень быстрый: count = len( driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']") )
+
+        #  Считаем количество через выполнение JS кода (это самый быстрый способ)
+        #  Вместо того чтобы тянуть все объекты в Python, мы попросим браузер вернуть только одно число.
+        count = driver.execute_script("return document.querySelectorAll('table.x-grid3-row-table').length;")
 
         # 4. Восстанавливаем исходное позиционирование на весь документ
         driver.switch_to.default_content()
@@ -266,12 +308,26 @@ class InventoryHelper:
         driver.switch_to.frame("mainframe")
 
         # 3. Проходим по списку всех найденных элементов и ищем нужный:
-        i = 0
-        for row in driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']"):
-            if i == index:                                                                    # Мы нашли искомый элемент
-                row.click()
-                break                                                                             # Можно завершать цикл
-            i = i + 1
+
+        # Вариант через Xpath и явным ожиданием:
+        # явное ожидание(WebDriverWait), чтобы код не падал, если таблица загружается с задержкой
+
+        # 1. Формируем тот самый рабочий XPath
+        xpath_selector = f"(//table[@class='x-grid3-row-table'])[{index + 1}]"
+
+        # 2. Ждем до 10 секунд, пока элемент не только появится, но и станет кликабельным
+        element = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpath_selector)))
+
+        # 3. Кликаем
+        element.click()
+
+        # Старый способ не оптимальный очень! Лушче сразу по индексу мы
+        # i = 0
+        # for row in driver.find_elements(By.XPATH, "//table[@class='x-grid3-row-table']"):
+        #     if i == index:                                                                    # Мы нашли искомый элемент
+        #         row.click()
+        #         break                                                                             # Можно завершать цикл
+        #     i = i + 1
 
         return
 
